@@ -10,5 +10,3 @@ __pycache__/
 out/
 logs/
 *.mp4
-agent/data/*/
-!agent/data/.gitkeep

@@ -10,5 +10,5 @@ __pycache__/
 out/
 logs/
 *.mp4
-g1d-astra/data/*/
-!g1d-astra/data/.gitkeep
+agent/data/*/
+!agent/data/.gitkeep

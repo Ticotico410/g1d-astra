@@ -4,18 +4,19 @@
 
 | 任务 | Notebook | 示教数据 |
 |---|---|---|
-| 画圆 | [`notebooks/01_g1d_draw_circle.ipynb`](notebooks/01_g1d_draw_circle.ipynb) | `g1d_teleop/data/demo/draw_circle/episode_0000.mcap` |
-| 写名字 | [`notebooks/02_g1d_write_name.ipynb`](notebooks/02_g1d_write_name.ipynb) | `g1d_teleop/data/demo/write_g1d/episode_0001.mcap` |
-| 双臂山水画 | [`notebooks/03_g1d_draw_landscape.ipynb`](notebooks/03_g1d_draw_landscape.ipynb) | `g1d_teleop/data/demo/draw_picture/episode_0001.mcap` |
+| 画圆 | [`notebooks/01_g1d_draw_circle.ipynb`](notebooks/01_g1d_draw_circle.ipynb) | `teleop/data/draw_circle/episode_0000.mcap` |
+| 写名字 | [`notebooks/02_g1d_write_name.ipynb`](notebooks/02_g1d_write_name.ipynb) | `teleop/data/write_g1d/episode_0001.mcap` |
+| 双臂山水画 | [`notebooks/03_g1d_draw_landscape.ipynb`](notebooks/03_g1d_draw_landscape.ipynb) | `teleop/data/draw_picture/episode_0001.mcap` |
 
 三个任务共用 [`scripts/g1d_reference_agent.py`](scripts/g1d_reference_agent.py) 和 [`scripts/ui.py`](scripts/ui.py)。Notebook 负责选择任务示教、任务提示和运行目录，不包含另一套机器人控制实现。
 
 ## 与摇操 Harness 的关系
 
-G1-D 的机器人底层能力位于独立仓库：
+G1-D 的机器人底层能力位于本仓库的 `teleop/`（本地也可使用独立目录）：
 
 ```text
-/home/karthus_chen/ycb_ws/g1d_teleop
+teleop/
+# 或 /home/karthus_chen/ycb_ws/g1d_teleop
 ```
 
 它是本仓库使用的 harness，负责：
@@ -117,7 +118,7 @@ OPENAI_BASE_URL=
 如 harness 不在默认位置：
 
 ```bash
-export G1D_TELEOP_ROOT=/path/to/g1d_teleop
+export G1D_TELEOP_ROOT=/path/to/teleop
 ```
 
 ## 启动相机
@@ -173,7 +174,7 @@ conda activate robot_teleop
 cd /home/karthus_chen/ycb_ws/piper-astra-jev
 python scripts/g1d_reference_agent.py \
   --run-dir "$RUN_DIR" \
-  --demo /home/karthus_chen/ycb_ws/g1d_teleop/data/demo/draw_picture/episode_0001.mcap \
+  --demo /home/karthus_chen/ycb_ws/g1d/teleop/data/draw_picture/episode_0001.mcap \
   --task-text '左臂画太阳，右臂画简化山体与飞鸟' \
   --agent-instructions '左臂画太阳，右臂画简化山体轮廓和线条飞鸟；根据四路现场画面检查安全和最终画面。' \
   --phase-label '双臂山水画' \

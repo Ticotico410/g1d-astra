@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "robot-teleop"
+version = "0.1.0"
+description = "MuJoCo simulation and teleoperation interfaces for Unitree G1-D"
+requires-python = ">=3.10"
+dependencies = [
+  "mujoco>=3.1.6",
+  "numpy>=1.23",
+  "pin>=2.7",
+  "placo>=0.9.25",
+  "PyYAML>=6.0",
+  "scipy>=1.10",
+  "tyro>=0.8",
+]
+
+[project.optional-dependencies]
+unitree = ["unitree-sdk2py"]
+record = [
+  "mcap>=1.1",
+  "pyzmq>=25",
+  "opencv-python>=4.5",
+]
+
+[tool.setuptools.packages.find]
+where = ["robot_teleop/src"]

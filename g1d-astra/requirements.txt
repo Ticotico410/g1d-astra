@@ -1,0 +1,6 @@
+numpy>=1.24
+httpx>=0.27
+pillow
+opencv-python
+python-dotenv
+jupyterlab>=4

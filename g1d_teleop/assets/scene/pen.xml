@@ -1,0 +1,20 @@
+<mujoco model="whiteboard_pen">
+  <compiler angle="radian" autolimits="true"/>
+  <option gravity="0 0 -9.81"/>
+  <asset>
+    <material name="pen_white" rgba="0.94 0.94 0.92 1"/>
+    <material name="pen_red" rgba="0.82 0.03 0.04 1"/>
+    <material name="pen_black" rgba="0.08 0.08 0.08 1"/>
+  </asset>
+  <worldbody>
+    <body name="pen" pos="0 0 0.075">
+      <freejoint name="pen_free"/>
+      <inertial pos="0 0 0" mass="0.02" diaginertia="0.000045 0.000045 0.000001"/>
+      <!-- All dimensions are in meters. Total length = 0.15; diameter = 0.02. -->
+      <geom name="pen_barrel" type="cylinder" pos="0 0 -0.001" size="0.0092 0.040" material="pen_white"/>
+      <geom name="pen_cap" type="cylinder" pos="0 0 0.057" size="0.010 0.018" material="pen_red"/>
+      <geom name="pen_rear" type="cylinder" pos="0 0 -0.0555" size="0.0085 0.0145" material="pen_red"/>
+      <geom name="pen_tip" type="cylinder" pos="0 0 -0.0725" size="0.0025 0.0025" material="pen_black"/>
+    </body>
+  </worldbody>
+</mujoco>

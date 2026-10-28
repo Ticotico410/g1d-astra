@@ -1,0 +1,29 @@
+<mujoco model="writeboard">
+  <compiler angle="radian"/>
+  <option gravity="0 0 -9.81"/>
+  <asset>
+    <material name="white_surface" rgba="0.91 0.94 0.94 1" specular="0.65" shininess="0.55"/>
+    <material name="aluminum" rgba="0.73 0.76 0.77 1" specular="0.7" shininess="0.7"/>
+    <material name="corner" rgba="0.48 0.49 0.59 1"/>
+  </asset>
+  <worldbody>
+    <!-- Board lies flat in its initial pose. Total envelope 0.60 x 0.45 x 0.02 m. -->
+    <body name="writeboard" pos="0 0 0.76">
+      <freejoint name="writeboard_free"/>
+      <inertial pos="0 0 0" mass="1.2" diaginertia="0.04054 0.02300 0.06300"/>
+      <!-- Single collision slab; decorative geoms have collisions disabled. -->
+      <geom name="board_collision" type="box" size="0.30 0.225 0.010" rgba="0 0 0 0" contype="1" conaffinity="1" friction="0.8 0.01 0.001"/>
+      <geom name="writing_surface" type="box" size="0.282 0.207 0.001" pos="0 0 0.009" material="white_surface" contype="0" conaffinity="0"/>
+      <!-- Aluminum perimeter, within the overall envelope. -->
+      <geom name="frame_front" type="box" size="0.284 0.009 0.008" pos="0 -0.216 0" material="aluminum" contype="0" conaffinity="0"/>
+      <geom name="frame_back" type="box" size="0.284 0.009 0.008" pos="0 0.216 0" material="aluminum" contype="0" conaffinity="0"/>
+      <geom name="frame_left" type="box" size="0.009 0.207 0.008" pos="-0.291 0 0" material="aluminum" contype="0" conaffinity="0"/>
+      <geom name="frame_right" type="box" size="0.009 0.207 0.008" pos="0.291 0 0" material="aluminum" contype="0" conaffinity="0"/>
+      <!-- Protective corner caps. -->
+      <geom name="cap_1" type="box" size="0.016 0.016 0.010" pos="-0.284 -0.209 0" material="corner" contype="0" conaffinity="0"/>
+      <geom name="cap_2" type="box" size="0.016 0.016 0.010" pos="-0.284 0.209 0" material="corner" contype="0" conaffinity="0"/>
+      <geom name="cap_3" type="box" size="0.016 0.016 0.010" pos="0.284 -0.209 0" material="corner" contype="0" conaffinity="0"/>
+      <geom name="cap_4" type="box" size="0.016 0.016 0.010" pos="0.284 0.209 0" material="corner" contype="0" conaffinity="0"/>
+    </body>
+  </worldbody>
+</mujoco>

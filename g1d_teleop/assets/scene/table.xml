@@ -1,0 +1,66 @@
+<mujoco model="table">
+    <compiler angle="radian"/>
+
+    <option gravity="0 0 -9.81"/>
+
+    <asset>
+        <material name="table_top_mat"
+                  rgba="0.82 0.78 0.83 1"/>
+
+        <material name="table_leg_mat"
+                  rgba="0.65 0.42 0.22 1"/>
+    </asset>
+
+    <worldbody>
+        <body name="table" pos="0 0 0">
+
+            <!-- 桌面：150 × 70 × 7 cm -->
+            <!-- 桌面上表面高度：0.75 m -->
+            <geom name="table_top"
+                  type="box"
+                  pos="0 0 0.715"
+                  size="0.75 0.35 0.035"
+                  material="table_top_mat"
+                  contype="1"
+                  conaffinity="1"
+                  friction="1.0 0.005 0.0001"/>
+
+            <!-- 左前桌腿 -->
+            <geom name="leg_front_left"
+                  type="cylinder"
+                  pos="0.69 0.29 0.34"
+                  size="0.04 0.34"
+                  material="table_leg_mat"
+                  contype="1"
+                  conaffinity="1"/>
+
+            <!-- 右前桌腿 -->
+            <geom name="leg_front_right"
+                  type="cylinder"
+                  pos="0.69 -0.29 0.34"
+                  size="0.04 0.34"
+                  material="table_leg_mat"
+                  contype="1"
+                  conaffinity="1"/>
+
+            <!-- 左后桌腿 -->
+            <geom name="leg_back_left"
+                  type="cylinder"
+                  pos="-0.69 0.29 0.34"
+                  size="0.04 0.34"
+                  material="table_leg_mat"
+                  contype="1"
+                  conaffinity="1"/>
+
+            <!-- 右后桌腿 -->
+            <geom name="leg_back_right"
+                  type="cylinder"
+                  pos="-0.69 -0.29 0.34"
+                  size="0.04 0.34"
+                  material="table_leg_mat"
+                  contype="1"
+                  conaffinity="1"/>
+
+        </body>
+    </worldbody>
+</mujoco>

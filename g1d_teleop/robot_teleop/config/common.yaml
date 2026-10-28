@@ -1,0 +1,48 @@
+# Common teleop defaults shared by all robots.
+# Robot-specific files (config/<robot>.yaml) are merged on top of this one.
+fps: 50
+ik_dt: 0.02
+# One solve per frame, matching the reference stack: iterating further pulls the
+# posture apart when the target is out of reach.
+ik_iters: 1
+activation_grip_threshold: 0.9
+# Controller translation clamp. Truncates targets outside the reachable
+# workspace so IK does not diverge.
+max_hand_delta: 0.45
+# Per-frame joint change clamp. Bad solutions are clipped, and clearly
+# divergent ones are rolled back.
+max_joint_step: 0.12
+# Interpolation time to reset_joint_positions on startup and on VR-A reset.
+reset_duration: 0.5
+# Soft pull toward the reset posture for every controlled joint. Larger values
+# keep the robot closer to its neutral configuration.
+placo_regularization_weight: 0.01
+# Default reset-posture weight for body joints; per-joint overrides live in the
+# robot files under body_joint_regularization_weights.
+body_regularization_weight: 0.01
+
+# Teleop mode. wbc: headset height drives the lift, waist joins whole-body IK.
+# manual: right stick drives the lift, or manual_joystick_joint.
+teleop_control_mode: wbc
+lz_height_scale: 0.5
+# Lift speed in manual mode, m/s.
+manual_lz_speed: 0.10
+
+# Visualize the wheeled base as a floating base, integrated at fps * v.
+# Fixed-base robots set this to false in their own config.
+floating_base: true
+publish_topic: rt/whole_body_sdk
+
+# DirectVR/PICO compatible reader. Pose indices must match the headset output.
+direct_vr:
+  enabled: true
+  tcp_port: 63901
+  broadcast_port: 29888
+  left_pose_index: 20
+  right_pose_index: 21
+  head_pose_index: 0
+  use_grip_to_calibrate: true
+
+# URDF gripper joint range shared by the Dex1 models.
+gripper_open_position: 0.0
+gripper_closed_position: 0.0245

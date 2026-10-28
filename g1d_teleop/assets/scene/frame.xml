@@ -1,0 +1,109 @@
+
+<mujoco model="whiteboard_frame">
+  <compiler angle="radian"/>
+
+  <asset>
+    <material name="frame_metal"
+              rgba="0.55 0.58 0.62 1"/>
+    <material name="frame_rubber"
+              rgba="0.22 0.23 0.27 1"/>
+  </asset>
+
+  <worldbody>
+    <body name="frame" pos="0 0 0">
+
+      <!-- 左侧三角支架 -->
+      <geom name="left_base"
+            type="capsule"
+            fromto="-0.265 -0.195 0.018
+                    -0.265 0.195 0.018"
+            size="0.012"
+            material="frame_metal"/>
+
+      <geom name="left_slope"
+            type="capsule"
+            fromto="-0.265 -0.195 0.035
+                    -0.265 0.195 0.26017"
+            size="0.012"
+            material="frame_metal"/>
+
+      <geom name="left_rear"
+            type="capsule"
+            fromto="-0.265 0.195 0.018
+                    -0.265 0.195 0.26017"
+            size="0.012"
+            material="frame_metal"/>
+
+      <!-- 右侧三角支架 -->
+      <geom name="right_base"
+            type="capsule"
+            fromto="0.265 -0.195 0.018
+                    0.265 0.195 0.018"
+            size="0.012"
+            material="frame_metal"/>
+
+      <geom name="right_slope"
+            type="capsule"
+            fromto="0.265 -0.195 0.035
+                    0.265 0.195 0.26017"
+            size="0.012"
+            material="frame_metal"/>
+
+      <geom name="right_rear"
+            type="capsule"
+            fromto="0.265 0.195 0.018
+                    0.265 0.195 0.26017"
+            size="0.012"
+            material="frame_metal"/>
+
+      <!-- 前后横向连接杆 -->
+      <geom name="front_crossbar"
+            type="capsule"
+            fromto="-0.265 -0.195 0.018
+                    0.265 -0.195 0.018"
+            size="0.012"
+            material="frame_metal"/>
+
+      <geom name="rear_crossbar"
+            type="capsule"
+            fromto="-0.265 0.195 0.018
+                    0.265 0.195 0.018"
+            size="0.012"
+            material="frame_metal"/>
+
+      <!-- 白板底部限位挡条 -->
+      <geom name="bottom_lip"
+            type="box"
+            pos="0 -0.205 0.055"
+            size="0.29 0.005 0.02"
+            material="frame_rubber"/>
+
+      <!-- 四个防滑脚垫 -->
+      <geom name="left_front_foot"
+            type="box"
+            pos="-0.265 -0.195 0.008"
+            size="0.025 0.025 0.008"
+            material="frame_rubber"/>
+
+      <geom name="right_front_foot"
+            type="box"
+            pos="0.265 -0.195 0.008"
+            size="0.025 0.025 0.008"
+            material="frame_rubber"/>
+
+      <geom name="left_rear_foot"
+            type="box"
+            pos="-0.265 0.195 0.008"
+            size="0.025 0.025 0.008"
+            material="frame_rubber"/>
+
+      <geom name="right_rear_foot"
+            type="box"
+            pos="0.265 0.195 0.008"
+            size="0.025 0.025 0.008"
+            material="frame_rubber"/>
+
+    </body>
+  </worldbody>
+</mujoco>
+

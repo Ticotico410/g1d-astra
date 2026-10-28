@@ -1,0 +1,14 @@
+.env
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+out/
+logs/
+*.mp4
+g1d-astra/data/*/
+!g1d-astra/data/.gitkeep

@@ -1,0 +1,36 @@
+[Unit]
+Description=WBC 505 SMPL Image Server (USB + Pico camera)
+Documentation=
+# 等网络就绪（Pico 推流/客户端连接需要）+ 等 udev 把 USB 相机节点建好
+After=network-online.target systemd-udev-settle.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=unitree
+Group=unitree
+WorkingDirectory=/home/unitree/image_server
+ExecStart=/home/unitree/image_server/build/image_server --usb --pico-camera VR
+
+# 崩溃/异常退出自动拉起
+Restart=always
+RestartSec=3
+# 防止疯狂重启刷屏：60s 内最多重启 5 次
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+# 需要的话加环境变量，一行一个
+# Environment="LD_LIBRARY_PATH=/home/unitree/image_server/build"
+# Environment="DISPLAY=:0"
+
+# 日志走 journald
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=image-server
+
+# 进程被 kill 时给足退出时间（H.264 编码收尾）
+TimeoutStopSec=10
+KillSignal=SIGTERM
+
+[Install]
+WantedBy=multi-user.target

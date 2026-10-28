@@ -1,0 +1,188 @@
+# G1-D robot-specific teleop config. Shared defaults live in common.yaml.
+urdf_path: ../../assets/g1_d/g1_d.urdf
+floating_base_child_link: AGV_link
+
+# 实机模式对齐 test_g1_dex1_internal.py（已验证可控真机）：
+# rt/lowcmd 直控 + 每帧整机保持实测角 + 内置 Dex1 夹爪(电机 index 31/33)。
+hardware_interface: g1_d_dds
+g1d_motion_mode: false
+g1d_lowcmd_topic: rt/lowcmd
+# 若机器人跑 loco 控制器且处于 Regular 模式，可改回 arm_sdk：
+#   g1d_motion_mode: true
+#   g1d_lowcmd_topic: rt/arm_sdk
+#   g1d_internal_gripper: false
+g1d_lowstate_topic: rt/lowstate
+g1d_height_cmd_topic: rt/cmd_hispeed
+g1d_move_cmd_topic: rt/cmd_vel_no_limit
+# 内置 Dex1 夹爪：直接在 LowCmd 里控制电机 index 31(左)/33(右)。
+g1d_internal_gripper: true
+g1d_left_gripper_motor_index: 31
+g1d_right_gripper_motor_index: 33
+# 外置夹爪(g1d_internal_gripper: false)时才用到下面两个话题：
+g1d_left_gripper_cmd_topic: rt/dex1/left/cmd
+g1d_right_gripper_cmd_topic: rt/dex1/right/cmd
+g1d_lift_joints:
+  - LZ_mt_Joint
+  - LZ_it_Joint
+g1d_waist_yaw_joint: torso_Joint
+g1d_waist_pitch_joint: Yaw_Joint
+
+# ==== 电机 PD 增益 / 前馈（在此覆盖 config.py 默认值，改完重启生效）====
+# 腰俯仰：topic 走独立 rt/waistpitchcmd；改 "lowcmd" 则走 rt/lowcmd 电机13。
+g1d_waist_pitch_channel: topic
+g1d_kp_waist_pitch: 500.0       # 俯仰刚度（不动/抬不起来→加大）
+g1d_kd_waist_pitch: 3.0         # 俯仰阻尼（抖动→加大）
+g1d_waist_pitch_tau_ff: -8.0    # 俯仰重力前馈力矩（含符号；塌陷/反向→翻符号或加大绝对值）
+# 手臂 / 手腕 / 腰yaw / 其余保持关节
+g1d_kp_arm: 80.0
+g1d_kd_arm: 3.0
+g1d_kp_wrist: 40.0
+g1d_kd_wrist: 1.5
+g1d_kp_waist: 100.0             # 腰yaw（电机12）
+g1d_kd_waist: 2.0
+g1d_kp_lock: 300.0             # 保持关节锁定刚度
+g1d_kd_lock: 3.0
+# 夹爪
+g1d_gripper_kp: 5.0
+g1d_gripper_kd: 0.05
+# 升降位置闭环（速度指令 PD，对齐 hight_ctl.cpp）
+g1d_lift_position_kp: 20.0
+g1d_lift_position_kd: 0.3
+g1d_lift_max_velocity: 0.8
+g1d_lift_deadband: 0.001
+
+# Pinocchio RNEA 前馈输出顺序：14 维双臂 + 腰 pitch（publisher 会取第 15 维给腰 pitch）。
+rnea_feedforward_joints:
+  - left_shoulder_pitch_joint
+  - left_shoulder_roll_joint
+  - left_shoulder_yaw_joint
+  - left_elbow_joint
+  - left_wrist_roll_joint
+  - left_wrist_pitch_joint
+  - left_wrist_yaw_joint
+  - right_shoulder_pitch_joint
+  - right_shoulder_roll_joint
+  - right_shoulder_yaw_joint
+  - right_elbow_joint
+  - right_wrist_roll_joint
+  - right_wrist_pitch_joint
+  - right_wrist_yaw_joint
+  - Yaw_Joint
+
+# 每个关节自己的 reset 位置；Placo 正则也会以这个姿态为基础构型。
+reset_joint_positions:
+  LZ_mt_Joint: 0.06
+  LZ_it_Joint: 0.06
+  Yaw_Joint: 0.0
+  torso_Joint: 0.0
+  left_shoulder_pitch_joint: 0.3
+  left_shoulder_roll_joint: 0.2
+  left_shoulder_yaw_joint: 0.0
+  left_elbow_joint: -0.3
+  left_wrist_roll_joint: 0.0
+  left_wrist_pitch_joint: 0.0
+  left_wrist_yaw_joint: 0.0
+  right_shoulder_pitch_joint: 0.3
+  right_shoulder_roll_joint: -0.2
+  right_shoulder_yaw_joint: 0.0
+  right_elbow_joint: -0.3
+  right_wrist_roll_joint: 0.0
+  right_wrist_pitch_joint: 0.0
+  right_wrist_yaw_joint: 0.0
+  left_dex1_1_Joint1_1: 0.0
+  left_dex1_1_Joint2_1: 0.0
+  right_dex1_1_Joint1_1: 0.0
+  right_dex1_1_Joint2_1: 0.0
+
+# 身体关节逐关节零位约束权重，越大该关节越不参与末端 IK。
+body_joint_regularization_weights:
+  Yaw_Joint: 0.07
+  torso_Joint: 0.02
+
+# 从 IK 中屏蔽 LZ 升降关节，改为由头显高度 delta 控制。
+ik_masked_joints:
+  - LZ_mt_Joint
+  - LZ_it_Joint
+lz_height_joints:
+  - LZ_mt_Joint
+  - LZ_it_Joint
+# 升降启动默认高度（调低），行程 0..0.21。
+lz_height_offset: 0.05
+lz_joint_min: 0.0
+lz_joint_max: 0.21
+
+controlled_joints:
+  - LZ_mt_Joint
+  - LZ_it_Joint
+  - Yaw_Joint
+  - torso_Joint
+  - left_shoulder_pitch_joint
+  - left_shoulder_roll_joint
+  - left_shoulder_yaw_joint
+  - left_elbow_joint
+  - left_wrist_roll_joint
+  - left_wrist_pitch_joint
+  - left_wrist_yaw_joint
+  - right_shoulder_pitch_joint
+  - right_shoulder_roll_joint
+  - right_shoulder_yaw_joint
+  - right_elbow_joint
+  - right_wrist_roll_joint
+  - right_wrist_pitch_joint
+  - right_wrist_yaw_joint
+  - left_dex1_1_Joint1_1
+  - left_dex1_1_Joint2_1
+  - right_dex1_1_Joint1_1
+  - right_dex1_1_Joint2_1
+
+body_joints:
+  - LZ_mt_Joint
+  - LZ_it_Joint
+  - Yaw_Joint
+  - torso_Joint
+
+left_arm_joints:
+  - left_shoulder_pitch_joint
+  - left_shoulder_roll_joint
+  - left_shoulder_yaw_joint
+  - left_elbow_joint
+  - left_wrist_roll_joint
+  - left_wrist_pitch_joint
+  - left_wrist_yaw_joint
+right_arm_joints:
+  - right_shoulder_pitch_joint
+  - right_shoulder_roll_joint
+  - right_shoulder_yaw_joint
+  - right_elbow_joint
+  - right_wrist_roll_joint
+  - right_wrist_pitch_joint
+  - right_wrist_yaw_joint
+
+left_gripper_joints:
+  - left_dex1_1_Joint1_1
+  - left_dex1_1_Joint2_1
+right_gripper_joints:
+  - right_dex1_1_Joint1_1
+  - right_dex1_1_Joint2_1
+
+# base_cmd = [vx, 0.0, vyaw] + [LZ_mt_Joint, LZ_it_Joint, Yaw_Joint, torso_Joint]
+# 机器人无侧向速度能力，第二项 vy 固定为 0.0，仅保留占位。
+base_cmd_joints:
+  - LZ_mt_Joint
+  - LZ_it_Joint
+  - Yaw_Joint
+  - torso_Joint
+
+left_ee_body: left_wrist_yaw_link
+right_ee_body: right_wrist_yaw_link
+
+# ==== 数据录制 (record / replay -> MCAP) ====
+record_dir: ./data
+record_task_name: g1d_teleop
+record_fps: 30
+record_images: true
+record_tts: true                     # 开始/保存/删除时用机器人喇叭中文播报
+record_tts_speaker_id: 0
+image_server_host: 192.168.123.164   # 改成你的 image_server IP
+image_server_port: 5555
+image_client_type: standard          # USB 相机=standard；realsense=dex
